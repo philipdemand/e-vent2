@@ -3,8 +3,8 @@ class EventsController < ApplicationController
     skip_before_action :authorized, only: :index
 
     def index
-        @events = Event.all
-        render json: @events
+        @events = Event.includes(:attendances).all
+        render json: @events, include: :attendances
     end
     
     def show
@@ -13,8 +13,7 @@ class EventsController < ApplicationController
     end
 
     def create
-        user = User.find(session[:user_id])
-        event = user.events.create!(event_params)
+        event = Event.create!(event_params)
         render json: event, status: :created
     end
 

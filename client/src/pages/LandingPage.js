@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   return (
-    <div>
+    <div className="event">
       <h2>Welcome to E-Vent</h2>
       <p>Please select an option below:</p>
       <div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const CreateEvent = ({ onAddEvent }) => {
   const [eventData, setEventData] = useState({
@@ -9,8 +10,16 @@ const CreateEvent = ({ onAddEvent }) => {
     details: '',
   });
 
+  const navigate = useNavigate();
+
   function resetForm() {
-    setEventData(" ");
+    setEventData({
+      title: '',
+      address: '',
+      date: '',
+      time: '',
+      details: '',
+    });
   }
 
   const handleChange = (e) => {
@@ -27,7 +36,6 @@ const CreateEvent = ({ onAddEvent }) => {
       time: eventData.time,
       details: eventData.details,
     };
-    console.log("Before FETCH", newEvent);
     fetch("/events", {
       method: "POST",
       headers: {
@@ -38,6 +46,7 @@ const CreateEvent = ({ onAddEvent }) => {
       if (res.ok) {
         res.json().then((data) => onAddEvent(data));
         resetForm();
+        navigate("/events");
       } else {
         res.json().then((data) => console.log(data.errors));
       }
@@ -45,7 +54,7 @@ const CreateEvent = ({ onAddEvent }) => {
   }
 
   return (
-    <div>
+    <div className="event">
       <h2>Create Event</h2>
       <form onSubmit={handleSubmit}>
         <div>

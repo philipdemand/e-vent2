@@ -17,9 +17,13 @@ const Navbar = ({ setUser, user }) => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">
+      {!user ? (<Link to="/" className="logo">
         E-Vent
-      </Link>
+      </Link>) : 
+      (<Link to="/events" className="logo">
+      E-Vent
+    </Link>)
+      }
       { user ? <h4 className="identify">Welcome {user.username}!</h4> : null }
       { user ? <button onClick={handleLogoutClick} className="logout-button">Logout</button> : null }
     </nav>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -36,6 +38,7 @@ const SignUpPage = ({ onLogin }) => {
       // setIsLoading(false);
       if (r.ok) {
         r.json().then((user) => onLogin(user));
+        navigate("/events");
       } else {
         r.json().then((err) => console.log(err.errors));
       }
@@ -43,7 +46,7 @@ const SignUpPage = ({ onLogin }) => {
   };
 
   return (
-    <div>
+    <div className="event">
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div>

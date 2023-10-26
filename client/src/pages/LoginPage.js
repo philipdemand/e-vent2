@@ -4,14 +4,7 @@ import { useNavigate } from "react-router-dom";
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-//   const [isMounted, setIsMounted] = useState(true);
   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     return () => {
-//       setIsMounted(false);
-//     };
-//   }, []);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -46,7 +39,7 @@ const LoginPage = ({ onLogin }) => {
   }
 
   return (
-    <div>
+    <div className="event">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
