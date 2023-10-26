@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext'
 import './styles.css';
 
-const Navbar = ({ setUser, user }) => {
+const Navbar = () => {
 
     const navigate = useNavigate();
+
+    const {user, setUser} = useContext(UserContext)
 
     function handleLogoutClick() {
         fetch("/logout", { method: "DELETE" }).then((r) => {

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../contexts/UserContext'
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const {setUser} = useContext(UserContext)
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -28,7 +31,7 @@ const LoginPage = ({ onLogin }) => {
       },
     }).then((res) => {
             if (res.ok) {
-              res.json().then((data) => onLogin(data));
+              res.json().then((data) => setUser(data));
               setUsername("");
               setPassword("");
               navigate("/events");

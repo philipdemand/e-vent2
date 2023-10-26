@@ -2,7 +2,7 @@ import React from 'react';
 import Event from './Event'
 import { Link } from 'react-router-dom';
 
-const EventList = ({ events, user, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
+const EventList = ({ events, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
 
   return (
     <div>
@@ -14,7 +14,7 @@ const EventList = ({ events, user, onAttendanceRegistered, onChangeTotalAttendee
         <Event 
           key={event.id} 
           event={event} 
-          user={user} 
+          // user={user} 
           onAttendanceRegistered={onAttendanceRegistered}
           onChangeTotalAttendees={onChangeTotalAttendees}
           onDeleteAttendance={onDeleteAttendance}

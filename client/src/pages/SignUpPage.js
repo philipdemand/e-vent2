@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../contexts/UserContext'
 
-const SignUpPage = ({ onLogin }) => {
+const SignUpPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const {setUser} = useContext(UserContext)
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -37,7 +40,7 @@ const SignUpPage = ({ onLogin }) => {
     }).then((r) => {
       // setIsLoading(false);
       if (r.ok) {
-        r.json().then((user) => onLogin(user));
+        r.json().then((user) => setUser(user));
         navigate("/events");
       } else {
         r.json().then((err) => console.log(err.errors));

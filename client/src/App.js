@@ -1,29 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import EventList from './components/EventList';
 import CreateEvent from './components/CreateEvent';
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
+import { UserContext } from './contexts/UserContext'
 
-const App = () => {
+function App() {
 
-  const [user, setUser] = useState(null);
   const [events, setEvents] = useState([])
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch("/me").then((res) => {
-      if (res.ok) {
-        res.json().then((data) => setUser(data));
-        navigate("/events");
-      } else {
-        setUser(null);
-        navigate("/");
-      }
-    });
-  }, []);
+  const {user} = useContext(UserContext);
 
   useEffect(() => {
     fetch('/events')
@@ -84,16 +73,21 @@ const App = () => {
 
   return (
     <>
-    <Navbar setUser={setUser} user={user}/>
-    {user ? (
-    <Routes>
+    <Navbar />
+    {!user ? (
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+      </Routes>
+    ) : (
+      <Routes>
       <Route path="/" 
         element={<LandingPage />} 
         />
       <Route path="/events" 
         element={<EventList 
           events={events} 
-          user={user} 
           onAttendanceRegistered={handleAttendanceRegistered}
           onChangeTotalAttendees={handleChangeTotalAttendees}
           onDeleteAttendance={handleDeleteAttendance}
@@ -102,17 +96,6 @@ const App = () => {
         element={<CreateEvent 
           onAddEvent={handleAddEvent}
           />} />
-    </Routes>
-    ) : (
-    <Routes>
-      <Route path="/" 
-        element={<LandingPage />} />
-      <Route path="/login" 
-        element={<LoginPage 
-          onLogin={setUser}/>} />
-      <Route path="/signup" 
-        element={<SignUpPage 
-          onLogin={setUser}/>} />
     </Routes>
     )}
     </>

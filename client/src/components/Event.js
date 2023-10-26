@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext'
 
-const Event = ({ event, user, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
+const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
+
   const [attendees, setAttendees] = useState(1);
   const [editingAttendees, setEditingAttendees] = useState(false);
+
+  const {user} = useContext(UserContext)
 
   const isRegistered = event.attendances && event.attendances.length > 0
   ? event.attendances.some((attendance) => attendance.user_id === user.id)
