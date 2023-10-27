@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-const CreateEvent = ({ onAddEvent }) => {
+const CreateEvent = ({ onAddEvent, errorData, setErrorData }) => {
   const [eventData, setEventData] = useState({
     title: '',
     address: '',
@@ -48,7 +48,7 @@ const CreateEvent = ({ onAddEvent }) => {
         resetForm();
         navigate("/events");
       } else {
-        res.json().then((data) => console.log(data.errors));
+        res.json().then((data) => setErrorData(data.error));
       }
     });
   }
@@ -107,6 +107,9 @@ const CreateEvent = ({ onAddEvent }) => {
           />
         </div>
         <button type="submit">Create Event</button>
+        {errorData.length > 0 ? <ul style={{ color: "red" }}>
+          <li>{errorData}</li>
+        </ul> : null}
       </form>
     </div>
   );

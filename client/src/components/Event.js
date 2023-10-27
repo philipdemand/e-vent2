@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../contexts/UserContext'
 
-const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
+const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance, setErrorData }) => {
 
   const [attendees, setAttendees] = useState(1);
   const [editingAttendees, setEditingAttendees] = useState(false);
@@ -35,7 +35,8 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
         if (response.ok) {
           return response.json()
         } else {
-          console.error('Registration failed:', response.statusText);
+          response.json().then((data) => setErrorData(data.errors))
+          // console.error('Registration failed:', response.statusText);
         }
       })
       .then((newAttendance) => {

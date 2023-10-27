@@ -14,7 +14,7 @@ class AttendancesController < ApplicationController
     def update
       @attendance = Attendance.find(params[:id])
     
-      if @attendance.update(attendance_params)
+      if @attendance.update(attendance_params) && session[:user_id] == @attendance.user_id
         render json: @attendance
       else
         render json: @attendance.errors, status: :unprocessable_entity
@@ -23,8 +23,12 @@ class AttendancesController < ApplicationController
 
     def destroy
       @attendance = Attendance.find(params[:id])
-      @attendance.destroy
-      head :no_content
+      if session[:user_id] == @attendance.user_id
+        @attendance.destroy
+        head :no_content
+      else
+        render json: { error: 'Unauthorized' }, status: :unauthorized
+      end
     end
     
     private

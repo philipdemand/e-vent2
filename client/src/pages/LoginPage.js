@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../contexts/UserContext'
 
-const LoginPage = () => {
+const LoginPage = ({ errorData, setErrorData }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -36,10 +36,18 @@ const LoginPage = () => {
               setPassword("");
               navigate("/events");
             } else {
-              res.json().then((data) => console.log([data.error]));
+              res.json().then((data) => setErrorData(data.errors));
           }
     });
   }
+
+  const errorsToDisplay = errorData.map((error) => {
+    return (
+      <ul style={{ color: "red" }}>
+        <li key={error}>{error}</li>
+      </ul>
+    );
+  });
 
   return (
     <div className="event">
@@ -53,6 +61,7 @@ const LoginPage = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" value={password} onChange={handlePasswordChange} />
         </div>
+        {errorsToDisplay}
         <button type="submit">Login</button>
       </form>
     </div>

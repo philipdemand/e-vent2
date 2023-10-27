@@ -11,6 +11,7 @@ import { UserContext } from './contexts/UserContext'
 function App() {
 
   const [events, setEvents] = useState([])
+  const [errorData, setErrorData] = useState([])
 
   const {user} = useContext(UserContext);
 
@@ -77,7 +78,7 @@ function App() {
     {!user ? (
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage errorData={errorData} setErrorData={setErrorData}/>} />
         <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     ) : (
@@ -87,7 +88,8 @@ function App() {
         />
       <Route path="/events" 
         element={<EventList 
-          events={events} 
+          events={events}
+          setErrorData={setErrorData} 
           onAttendanceRegistered={handleAttendanceRegistered}
           onChangeTotalAttendees={handleChangeTotalAttendees}
           onDeleteAttendance={handleDeleteAttendance}
@@ -95,6 +97,8 @@ function App() {
       <Route path="/events/create" 
         element={<CreateEvent 
           onAddEvent={handleAddEvent}
+          errorData={errorData}
+          setErrorData={setErrorData}
           />} />
     </Routes>
     )}

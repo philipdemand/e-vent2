@@ -2,7 +2,7 @@ import React from 'react';
 import Event from './Event'
 import { Link } from 'react-router-dom';
 
-const EventList = ({ events, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
+const EventList = ({ events, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance, setErrorData }) => {
 
   return (
     <div>
@@ -13,8 +13,8 @@ const EventList = ({ events, onAttendanceRegistered, onChangeTotalAttendees, onD
       {events.map((event) => (
         <Event 
           key={event.id} 
-          event={event} 
-          // user={user} 
+          setErrorData={setErrorData}
+          event={event}
           onAttendanceRegistered={onAttendanceRegistered}
           onChangeTotalAttendees={onChangeTotalAttendees}
           onDeleteAttendance={onDeleteAttendance}

@@ -6,7 +6,6 @@ const SignUpPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  // const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const {setUser} = useContext(UserContext)
@@ -25,8 +24,6 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setErrors([]);
-    // setIsLoading(true);
     fetch("/signup", {
       method: "POST",
       headers: {
@@ -38,7 +35,6 @@ const SignUpPage = () => {
         password_confirmation: passwordConfirmation,
       }),
     }).then((r) => {
-      // setIsLoading(false);
       if (r.ok) {
         r.json().then((user) => setUser(user));
         navigate("/events");
