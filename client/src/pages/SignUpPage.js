@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../contexts/UserContext'
 
-const SignUpPage = () => {
+const SignUpPage = ({ errorData, setErrorData }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -39,7 +39,7 @@ const SignUpPage = () => {
         r.json().then((user) => setUser(user));
         navigate("/events");
       } else {
-        r.json().then((err) => console.log(err.errors));
+        r.json().then((err) => setErrorData(err.errors));
       }
     });
   };
@@ -61,6 +61,9 @@ const SignUpPage = () => {
           <input type="password" id="confirmation" value={passwordConfirmation} onChange={handlePassConfChange} />
         </div>
         <button type="submit">Sign Up</button>
+        {errorData.length > 0 ? <ul style={{ color: "red" }}>
+          <li>{errorData}</li>
+        </ul> : null}
       </form>
     </div>
   );

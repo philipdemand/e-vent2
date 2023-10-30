@@ -79,7 +79,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage errorData={errorData} setErrorData={setErrorData}/>} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signup" element={<SignUpPage errorData={errorData} setErrorData={setErrorData}/>} />
       </Routes>
     ) : (
       <Routes>
