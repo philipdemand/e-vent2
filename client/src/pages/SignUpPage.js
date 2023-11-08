@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../contexts/UserContext'
 
-const SignUpPage = ({ errorData, setErrorData }) => {
+const SignUpPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [errorData, setErrorData] = useState([])
   const navigate = useNavigate();
 
   const {setUser} = useContext(UserContext)
@@ -62,7 +63,7 @@ const SignUpPage = ({ errorData, setErrorData }) => {
         </div>
         <button type="submit">Sign Up</button>
         {errorData.length > 0 ? <ul style={{ color: "red" }}>
-          <li>{errorData}</li>
+          {errorData.map((error, i) => <li key={i}>{error}</li>)}
         </ul> : null}
       </form>
     </div>

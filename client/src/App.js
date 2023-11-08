@@ -11,7 +11,6 @@ import { UserContext } from './contexts/UserContext'
 function App() {
 
   const [events, setEvents] = useState([])
-  const [errorData, setErrorData] = useState([])
 
   const {user} = useContext(UserContext);
 
@@ -21,7 +20,6 @@ function App() {
     .then((data) => setEvents(data))
     .catch((error) => console.error('Error fetching events:', error));
   }, [])
-
 
   const handleAddEvent = (object) => {
     const newObj = {...object, attendances: []}
@@ -38,7 +36,6 @@ function App() {
       }
       return event;
     });
-
     setEvents(updatedEvents);
   };
 
@@ -47,12 +44,7 @@ function App() {
       if (event.id === object.event_id) {
         return {
           ...event,
-          attendances: event.attendances.map((attendance) => {
-            if (attendance.id === object.id) {
-              return { ...attendance, total_attendees: object.total_attendees };
-            }
-            return attendance;
-          }),
+          attendances: event.attendances.map(att => att.id === object.id ? object : att)
         };
       }
       return event;
@@ -78,8 +70,8 @@ function App() {
     {!user ? (
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage errorData={errorData} setErrorData={setErrorData}/>} />
-        <Route path="/signup" element={<SignUpPage errorData={errorData} setErrorData={setErrorData}/>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     ) : (
       <Routes>
@@ -88,8 +80,7 @@ function App() {
         />
       <Route path="/events" 
         element={<EventList 
-          events={events}
-          setErrorData={setErrorData} 
+          events={events} 
           onAttendanceRegistered={handleAttendanceRegistered}
           onChangeTotalAttendees={handleChangeTotalAttendees}
           onDeleteAttendance={handleDeleteAttendance}
@@ -97,8 +88,6 @@ function App() {
       <Route path="/events/create" 
         element={<CreateEvent 
           onAddEvent={handleAddEvent}
-          errorData={errorData}
-          setErrorData={setErrorData}
           />} />
     </Routes>
     )}

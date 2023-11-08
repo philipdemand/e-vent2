@@ -2,9 +2,10 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../contexts/UserContext'
 
-const LoginPage = ({ errorData, setErrorData }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorData, setErrorData] = useState([])
   const navigate = useNavigate();
 
   const {setUser} = useContext(UserContext)
@@ -41,14 +42,6 @@ const LoginPage = ({ errorData, setErrorData }) => {
     });
   }
 
-  const errorsToDisplay = errorData.map((error) => {
-    return (
-      <ul style={{ color: "red" }}>
-        <li key={error}>{error}</li>
-      </ul>
-    );
-  });
-
   return (
     <div className="event">
       <h2>Login</h2>
@@ -61,8 +54,10 @@ const LoginPage = ({ errorData, setErrorData }) => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" value={password} onChange={handlePasswordChange} />
         </div>
-        {errorsToDisplay}
         <button type="submit">Login</button>
+        {errorData.length > 0 ? <ul style={{ color: "red" }}>
+          {errorData.map((error, i) => <li key={i}>{error}</li>)}
+        </ul> : null}
       </form>
     </div>
   );

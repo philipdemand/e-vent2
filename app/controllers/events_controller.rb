@@ -3,13 +3,13 @@ class EventsController < ApplicationController
     skip_before_action :authorized, only: :index
 
     def index
-        @events = Event.includes(:attendances).all
-        render json: @events, include: :attendances
+        events = Event.includes(:attendances).all
+        render json: events
     end
     
     def show
-        @event = Event.find(params[:id])
-        render json: @event
+        event = Event.find(params[:id])
+        render json: event
     end
 
     def create

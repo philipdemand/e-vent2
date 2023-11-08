@@ -1,12 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../contexts/UserContext'
+import AttendeesList from './AttendeesList'
 
-const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance, setErrorData }) => {
+const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDeleteAttendance }) => {
 
   const [attendees, setAttendees] = useState(1);
   const [editingAttendees, setEditingAttendees] = useState(false);
+  const [errorData, setErrorData] = useState([])
 
   const {user} = useContext(UserContext)
+
+  const hasUserId = () => {
+    const attenObj = event.attendances.find(obj => obj.user_id === user.id);
+    return attenObj
+  }
 
   const isRegistered = event.attendances && event.attendances.length > 0
   ? event.attendances.some((attendance) => attendance.user_id === user.id)
@@ -18,13 +25,11 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
 
   const handleRegister = () => {
     const user_id = user.id
-    const event_id = event.id;
     const postData = {
       user_id: user_id,
-      event_id: event_id,
       total_attendees: parseInt(attendees)
     };
-    fetch(`/events/${event_id}/attendances`, {
+    fetch(`/events/${event.id}/attendances`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +41,6 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
           return response.json()
         } else {
           response.json().then((data) => setErrorData(data.errors))
-          // console.error('Registration failed:', response.statusText);
         }
       })
       .then((newAttendance) => {
@@ -61,16 +65,16 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
       body: JSON.stringify({total_attendees: parseInt(attendees)}),
     })
     .then((r) => r.json())
-    .then(object => onChangeTotalAttendees(object))
+    .then(attendanceObject => onChangeTotalAttendees(attendanceObject))
   };
 
-  const handleCancelRegistration = () => {
-    fetch(`/events/${event.id}/attendances/${registeredAttendance.id}`, {
+  const handleCancelRegistration = (id) => {
+    fetch(`/events/${event.id}/attendances/${id}`, {
       method: 'DELETE',
     })
       .then((response) => {
         if (response.ok) {
-          onDeleteAttendance(registeredAttendance.id)
+          onDeleteAttendance(id)
         } else {
           console.error('Failed to cancel registration:', response.statusText);
         }
@@ -94,14 +98,17 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
   
   return (
     <div className="event">
+      {errorData.length > 0 ? <ul style={{ color: "red" }}>
+          {errorData.map((error, i) => <li key={i}>{error}</li>)}
+      </ul> : null}
       <h2>{event.title}</h2>
       <p>Date: {event.date}</p>
       <p>Time: {eventTime}</p>
       <p>Location: {event.address}</p>
       <p>Details: {event.details}</p>
-      {isRegistered ? (
+      {hasUserId() ? (
         <div>
-          <h4>You are registered for this event with {registeredAttendance.total_attendees} attendees</h4>
+          <h4>You are registered for this event</h4>
           {editingAttendees ? (
             <div>
               <label>Total Number of Attendees:</label>
@@ -113,7 +120,7 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
           ) : (
             <div>
               <button onClick={handleEditAttendees}>Change Number of Attendees</button> <br></br> <br></br>
-              <button onClick={handleCancelRegistration}>Cancel Registration</button>
+              {/* <button onClick={handleCancelRegistration}>Cancel Registration</button> */}
             </div>
           )}
         </div>
@@ -127,6 +134,12 @@ const Event = ({ event, onAttendanceRegistered, onChangeTotalAttendees, onDelete
           <button onClick={handleRegister}>Register</button>
         </div>
       )}
+      <div>
+        <AttendeesList 
+          event={event} 
+          onCancelRegistration={handleCancelRegistration}
+        />
+      </div>
     </div>
   );
 };
